@@ -47,16 +47,10 @@ public class GeneticAlgorithm2 {
             long startTime = System.currentTimeMillis();
             List<Puzzle2> newPopulation = new ArrayList<>();
 
-            // int elitismCount = (int) (populationSize * 0.08);
-            // population.sort((p1, p2) -> Double.compare(p2.fitness(), p1.fitness()));
-            // newPopulation.addAll(population.subList(0, elitismCount));
             while (newPopulation.size() < populationSize) {
                 Puzzle2 parent1 = selectParent();
                 Puzzle2 parent2 = selectParent();
-                // Puzzle2 parent1 = rankSelection();
-                // Puzzle2 parent2 = rankSelection();
-                // Puzzle2 parent1 = rouletteWheelSelection();
-                // Puzzle2 parent2 = rouletteWheelSelection();
+
                 List<Puzzle2> children = crossover(parent1, parent2);
                 newPopulation.addAll(children);
             }
@@ -141,57 +135,6 @@ public class GeneticAlgorithm2 {
             }
         }
         return best;
-    }
-
-    private Puzzle2 rankSelection() {
-        // Sort the population in ascending order by fitness
-        population.sort((p1, p2) -> Double.compare(p1.fitness(), p2.fitness()));
-
-        // Calculate the sum of the ranks. For a population of size n, the sum of the
-        // ranks is n*(n+1)/2.
-        int rankSum = populationSize * (populationSize + 1) / 2;
-
-        // Generate a random number between 1 and rankSum
-        int randomRank = random.nextInt(rankSum) + 1;
-
-        // Select the individual whose rank corresponds to the random number
-        int rank = 0;
-        for (Puzzle2 individual : population) {
-            rank += populationSize - population.indexOf(individual);
-            if (rank >= randomRank) {
-                return individual;
-            }
-        }
-
-        return null;
-    }
-
-    private Puzzle2 rouletteWheelSelection() {
-        // Find the minimum fitness in the population
-        double minFitness = population.stream().mapToDouble(Puzzle2::fitness).min().orElse(0);
-
-        // If the minimum fitness is less than 0, adjust all fitness scores to make them
-        // positive
-        double fitnessAdjustment = minFitness < 0 ? -minFitness : 0;
-
-        // Calculate the total adjusted fitness of the population
-        double totalFitness = population.stream().mapToDouble(p -> p.fitness() + fitnessAdjustment).sum();
-
-        // Generate a random number between 0 and totalFitness
-        double randomFitness = random.nextDouble() * totalFitness;
-
-        // Select the individual. The probability that an individual is selected is
-        // proportional to its adjusted fitness.
-        double cumulativeFitness = 0.0;
-        for (Puzzle2 individual : population) {
-            cumulativeFitness += individual.fitness() + fitnessAdjustment;
-            if (cumulativeFitness >= randomFitness) {
-                System.out.println("Selected individual with fitness: " + individual.fitness());
-                return individual;
-            }
-        }
-
-        return null;
     }
 
     private List<Puzzle2> crossover(Puzzle2 parent1, Puzzle2 parent2) {
