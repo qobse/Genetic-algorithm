@@ -37,24 +37,6 @@ public class GeneticAlgorithm2 {
         }
     }
 
-    // public void run() {
-    // int generation = 0;
-    // while (generation < maxGenerations) {
-    // List<Puzzle2> newPopulation = new ArrayList<>();
-    // while (newPopulation.size() < populationSize) {
-    // Puzzle2 parent1 = selectParent();
-    // Puzzle2 parent2 = selectParent();
-    // List<Puzzle2> children = crossover(parent1, parent2);
-    // newPopulation.addAll(children);
-    // }
-    // for (Puzzle2 individual : newPopulation) {
-    // mutate(individual);
-    // }
-    // population = newPopulation;
-    // generation++;
-    // }
-    // }
-
     public void run() {
         this.generation = 0;
         int noImprovementCount = 0;
@@ -98,8 +80,6 @@ public class GeneticAlgorithm2 {
                 hasConverged = true;
             }
 
-            // System.out.println("Generation: " + generation + " - Time taken: " +
-            // elapsedTime + " ms");
             if (bestInGeneration.fitness() >= fitnessThreshold) {
                 System.out.println("\nSolution found with fitness score meeting the threshold.");
                 break;
@@ -125,10 +105,6 @@ public class GeneticAlgorithm2 {
             }
 
             this.generation++;
-            // new Thread(() -> {
-            // System.out.println("\nGeneration: " + generation + " Best fitness: " +
-            // bestInGeneration.fitness());
-            // }).start();
         }
     }
 
@@ -162,7 +138,6 @@ public class GeneticAlgorithm2 {
             Puzzle2 competitor = population.get(random.nextInt(populationSize));
             if (best == null || competitor.fitness() > best.fitness()) {
                 best = competitor;
-                // System.out.println("Selected individual with fitness: " + best.fitness());
             }
         }
         return best;
