@@ -11,7 +11,6 @@ public class Main {
         int gameSize = 4; // Define the size of the puzzle (4x4, 5x5, etc.)
         GeneticAlgorithm2 ga = new GeneticAlgorithm2(380, 0.09, 0.9, 4500);
 
-        // long startTime = System.currentTimeMillis();
         // Start the timer in a separate thread
         Timer timer = new Timer();
         class MyTimerTask extends TimerTask {
@@ -40,14 +39,9 @@ public class Main {
 
         ga.initializePopulation(gameSize);
 
-        // System.out.println("Initial population:");
-        ga.printPopulation();
         ga.run();
 
         timer.cancel(); // Stop the timer when done
-        // long endTime = System.currentTimeMillis();
-        // long elapsedTime = endTime - startTime;
-        // System.out.println("\nElapsed time: " + elapsedTime + " ms");
 
         List<Integer> fitnessProgress = ga.getBestFitnessPerGeneration();
         List<Long> generationTimes = ga.getGenerationTimes();
@@ -55,7 +49,7 @@ public class Main {
         long totalTime = task.getElapsedTime();
 
         System.out.println("\nFitness progress:");
-        // fitnessProgress.forEach(fitness -> System.out.println("Fitness: " + fitness));
+
         for (int i = 0; i < fitnessProgress.size(); i++) {
             System.out.println("Generation " + i + ": " + fitnessProgress.get(i));
             System.out.printf("Generation %d: Fitness = %d, Time = %03d ms%n", i + 1, fitnessProgress.get(i), generationTimes.get(i));
@@ -69,9 +63,7 @@ public class Main {
 
         Puzzle2 bestSolution = ga.getBestSolution();
         System.out.println("\nBest solution found with fitness: " + bestSolution.fitness() + ", Total time: " + totalTime + " ms, Convergence generation: " + (convergenceGeneration + 1));
-        // System.out.println("\nBest solution found with fitness: " + bestSolution.fitness());
-        // System.out.println("\ngeneration time: " + ga.getGenerationTime());
-        // System.out.println(bestSolution.toString());
+
         bestSolution.printBoard();
     }
 }
