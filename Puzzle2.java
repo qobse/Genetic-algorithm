@@ -215,14 +215,6 @@ public class Puzzle2 {
         this.rightClues = rightClues;
     }
 
-    // public void setClues(int[] topClues, int[] bottomClues, int[] leftClues,
-    // int[] rightClues) {
-    // this.topClues = topClues;
-    // this.bottomClues = bottomClues;
-    // this.leftClues = leftClues;
-    // this.rightClues = rightClues;
-    // }
-
     private void initializeBoard() {
         Random rand = new Random();
         for (int i = 0; i < gameSize; i++) {
@@ -294,51 +286,9 @@ public class Puzzle2 {
         board[row][col].setValue(value);
     }
 
-    // public int getGrid(int row, int col) {
-    // return board[row][col].getValue();
-    // }
-
     public int getGameSize() {
         return gameSize;
     }
-
-    // public void printBoard() {
-    // for (int i = 0; i < gameSize; i++) {
-    // for (int j = 0; j < gameSize; j++) {
-    // System.out.print(board[i][j].getValue() + " ");
-    // }
-    // System.out.println();
-    // }
-    // }
-
-    // public void printBoard() {
-    // StringBuilder sb = new StringBuilder();
-
-    // // Print top clues
-    // sb.append(" ");
-    // for (int clue : topClues) {
-    // sb.append(clue).append(" ");
-    // }
-    // sb.append("\n");
-
-    // // Print board with left and right clues
-    // for (int i = 0; i < gameSize; i++) {
-    // sb.append(leftClues[i]).append(" ");
-    // for (int j = 0; j < gameSize; j++) {
-    // sb.append(board[i][j].getValue()).append(" ");
-    // }
-    // sb.append(rightClues[i]).append("\n");
-    // }
-
-    // // Print bottom clues
-    // sb.append(" ");
-    // for (int clue : bottomClues) {
-    // sb.append(clue).append(" ");
-    // }
-    // sb.append("\n");
-
-    // System.out.println(sb.toString());
-    // }
 
     public void printBoard() {
         StringBuilder sb = new StringBuilder();
