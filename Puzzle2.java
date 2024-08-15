@@ -7,195 +7,34 @@ import java.util.HashSet;
 public class Puzzle2 {
     private Grid2[][] board;
     private int gameSize;
-    private static final char EMPTY_CELL = '.';
     private static final int EMPTY = 0;
-    private int[] topClues, bottomClues, leftClues, rightClues; // Clues for the puzzle2
+    private static int[] topClues, bottomClues, leftClues, rightClues;
 
-    // default constructor
-    public Puzzle2() {
-        this.gameSize = 4;
+    public Puzzle2(int gameSize) {
+        this.gameSize = gameSize;
         this.board = new Grid2[gameSize][gameSize];
         initializeBoard();
     }
 
-    public Puzzle2(int gameSize) {
-        this.gameSize = gameSize;
-        //////////////////////////// 9x9
-        // test 1
-        // this.topClues = new int[] { 3, 4, 2, 2, 1, 3, 3, 3, 5 };
-        // this.rightClues = new int[] { 3, 4, 3, 3, 3, 3, 2, 1, 2 };
-        // this.bottomClues = new int[] { 3, 1, 3, 5, 5, 3, 3, 2, 2 };
-        // this.leftClues = new int[] { 4, 2, 3, 3, 1, 4, 4, 4, 2 };
-        // //////////////////////////// 8x8
-        // test 2
-        // this.topClues = new int[] { 3, 1, 5, 2, 2, 4, 2, 4 };
-        // this.rightClues = new int[] { 4, 2, 2, 5, 2, 3, 3, 1 };
-        // this.bottomClues = new int[] { 4, 4, 2, 2, 3, 3, 3, 1 };
-        // this.leftClues = new int[] { 2, 2, 4, 1, 3, 2, 3, 4 };
-        //////////////////////////// 7x7
-        // test 7
-        // this.topClues = new int[] { 2, 1, 5, 2, 3, 3, 3 };
-        // this.rightClues = new int[] { 3, 4, 4, 1, 2, 2, 3 };
-        // this.bottomClues = new int[] { 3, 6, 1, 2, 2, 2, 3 };
-        // this.leftClues = new int[] { 2, 3, 1, 5, 3, 3, 2 };
-
-        // test 6
-        // this.topClues = new int[] { 3, 2, 3, 4, 6, 1, 7 };
-        // this.rightClues = new int[] { 1, 3, 2, 5, 2, 3, 2 };
-        // this.bottomClues = new int[] { 3, 3, 3, 2, 2, 1, 3 };
-        // this.leftClues = new int[] { 3, 2, 2, 1, 3, 3, 4 };
-
-        // test 5
-        // this.topClues = new int[] { 3, 2, 2, 3, 1, 3, 2 };
-        // this.rightClues = new int[] { 2, 4, 2, 3, 1, 3, 3 };
-        // this.bottomClues = new int[] { 1, 4, 3, 2, 6, 2, 2 };
-        // this.leftClues = new int[] { 2, 2, 4, 2, 3, 4, 1 };
-
-        // test 4
-        // this.topClues = new int[] { 1, 2, 2, 3, 3, 2, 4 };
-        // this.rightClues = new int[] { 3, 3, 3, 2, 3, 2, 1 };
-        // this.bottomClues = new int[] { 5, 2, 3, 4, 2, 2, 1 };
-        // this.leftClues = new int[] { 1, 2, 2, 3, 3, 3, 3 };
-
-        // test 3
-        // this.topClues = new int[] { 4, 1, 2, 3, 3, 2, 2 };
-        // this.rightClues = new int[] { 3, 1, 4, 2, 2, 3, 3 };
-        // this.bottomClues = new int[] { 1, 3, 4, 2, 2, 3, 4 };
-        // this.leftClues = new int[] { 2, 3, 2, 3, 4, 3, 1 };
-
-        // this.topClues = new int[] { 2, 1, 5, 5, 3, 3, 2 };
-        // this.rightClues = new int[] { 4, 1, 2, 3, 2, 2, 4 };
-        // this.bottomClues = new int[] { 1, 3, 2, 2, 2, 4, 5 };
-        // this.leftClues = new int[] { 2, 5, 3, 4, 3, 3, 1 };
-        //////////////////////////// 6x6
-        // this.topClues = new int[] { 1, 4, 2, 2, 2, 3 };
-        // this.rightClues = new int[] { 4, 2, 2, 4, 1, 2 };
-        // this.bottomClues = new int[] { 2, 1, 3, 4, 3, 2 };
-        // this.leftClues = new int[] { 1, 3, 3, 2, 6, 2 };
-
-        // test 6
-        // this.topClues = new int[] { 4, 2, 2, 3, 4, 1 };
-        // this.rightClues = new int[] { 1, 4, 2, 2, 2, 3 };
-        // this.bottomClues = new int[] { 1, 2, 4, 2, 2, 4 };
-        // this.leftClues = new int[] { 3, 3, 2, 3, 2, 1 };
-
-        // test 5
-        // this.topClues = new int[] { 4, 3, 4, 1, 2, 3 };
-        // this.rightClues = new int[] { 3, 2, 1, 4, 3, 4 };
-        // this.bottomClues = new int[] { 1, 2, 2, 3, 2, 3 };
-        // this.leftClues = new int[] { 3, 4, 4, 2, 2, 1 };
-
-        // test 4
-        // this.topClues = new int[] { 2, 2, 5, 2, 3, 1 };
-        // this.rightClues = new int[] { 1, 3, 2, 2, 4, 4 };
-        // this.bottomClues = new int[] { 2, 4, 1, 2, 2, 3 };
-        // this.leftClues = new int[] { 2, 2, 3, 2, 1, 2 };
-
-        // test 3
-        // difficult
-        // this.topClues = new int[] { 4, 3, 2, 3, 2, 1 };
-        // this.rightClues = new int[] { 1, 2, 2, 2, 4, 3 };
-        // this.bottomClues = new int[] { 1, 3, 2, 3, 2, 3 };
-        // this.leftClues = new int[] { 4, 3, 2, 3, 2, 1 };
-
-        // test 2
-        // this.topClues = new int[] { 2, 2, 3, 3, 3, 1 };
-        // this.rightClues = new int[] { 1, 3, 3, 2, 2, 4 };
-        // this.bottomClues = new int[] { 1, 2, 3, 2, 2, 3 };
-        // this.leftClues = new int[] { 2, 2, 3, 3, 3, 1 };
-        //////////////////////////// 5x5
-        // test 6
-        // this.topClues = new int[] { 1, 2, 5, 2, 3 };
-        // this.rightClues = new int[] { 3, 2, 3, 1, 3 };
-        // this.bottomClues = new int[] { 3, 2, 1, 2, 2 };
-        // this.leftClues = new int[] { 1, 3, 2, 3, 2 };
-
-        // test 5
-        // this.topClues = new int[] { 3, 1, 2, 4, 2 };
-        // this.rightClues = new int[] { 3, 3, 3, 1, 2 };
-        // this.bottomClues = new int[] { 3, 5, 3, 1, 2 };
-        // this.leftClues = new int[] { 2, 3, 1, 2, 2 };
-
-        // test 4
-        // this.topClues = new int[] { 2, 2, 1, 2, 3 };
-        // this.rightClues = new int[] { 3, 2, 5, 1, 2 };
-        // this.bottomClues = new int[] { 2, 3, 3, 1, 2 };
-        // this.leftClues = new int[] { 2, 2, 1, 3, 2 };
-
-        // test 3
-        // this.topClues = new int[] { 5, 1, 2, 3, 3 };
-        // this.rightClues = new int[] { 3, 2, 1, 2, 3 };
-        // this.bottomClues = new int[] { 1, 3, 3, 2, 2 };
-        // this.leftClues = new int[] { 2, 2, 3, 2, 1 };
-
-        // test 2
-        // this.topClues = new int[] { 5, 2, 1, 2, 2 };
-        // this.rightClues = new int[] { 3, 2, 1, 2, 2 };
-        // this.bottomClues = new int[] { 1, 2, 3, 4, 2 };
-        // this.leftClues = new int[] { 3, 4, 3, 2, 1 };
-
-        // this.topClues = new int[] { 2, 1, 2, 3, 4 };
-        // this.rightClues = new int[] { 3, 3, 2, 4, 1 };
-        // this.bottomClues = new int[] { 2, 3, 2, 3, 1 };
-        // this.leftClues = new int[] { 2, 3, 3, 1, 2 };
-
-        //////////////////////////// 4x4
-        // this.topClues = new int[] { 3, 1, 3, 2 };
-        // this.rightClues = new int[] { 2, 1, 3, 2 };
-        // this.bottomClues = new int[] { 2, 4, 1, 2 };
-        // this.leftClues = new int[] { 2, 3, 1, 2 };
-
-        // test 7
-        // this.topClues = new int[] { 4, 1, 2, 2 };
-        // this.rightClues = new int[] { 2, 2, 1, 3 };
-        // this.bottomClues = new int[] { 1, 4, 2, 2 };
-        // this.leftClues = new int[] { 2, 3, 2, 1 };
-
-        // test 6
-        // this.topClues = new int[] { 1, 2, 2, 4 };
-        // this.rightClues = new int[] { 4, 2, 2, 1 };
-        // this.bottomClues = new int[] { 3, 3, 2, 1 };
-        // this.leftClues = new int[] { 1, 2, 3, 3 };
-
-        // test 5
-        // this.topClues = new int[] { 2, 4, 1, 3 };
-        // this.rightClues = new int[] { 2, 2, 1, 3 };
-        // this.bottomClues = new int[] { 2, 1, 2, 2 };
-        // this.leftClues = new int[] { 2, 1, 3, 2 };
-
-        // test 4
-        // this.topClues = new int[] { 2, 1, 3, 2 };
-        // this.rightClues = new int[] { 2, 1, 2, 4 };
-        // this.bottomClues = new int[] { 1, 2, 2, 3 };
-        // this.leftClues = new int[] { 2, 3, 3, 1 };
-
-        // test 3
-        this.topClues = new int[] { 1, 4, 2, 2 };
-        this.rightClues = new int[] { 2, 2, 1, 3 };
-        this.bottomClues = new int[] { 4, 1, 2, 2 };
-        this.leftClues = new int[] { 1, 2, 3, 2 };
-
-        // this.topClues = new int[] { 3, 2, 2, 1 };
-        // this.rightClues = new int[] { 1, 2, 4, 2 };
-        // this.bottomClues = new int[] { 2, 3, 1, 3 };
-        // this.leftClues = new int[] { 4, 2, 1, 2 };
-
+    public Puzzle2(String filePath) throws IOException {
+        if (topClues == null || bottomClues == null || leftClues == null || rightClues == null) {
+            loadPuzzleFromFile(filePath);
+        }
+        this.gameSize = topClues.length; // Assuming all clues have the same length
         this.board = new Grid2[gameSize][gameSize];
         initializeBoard();
-
+        loadPuzzleFromFile(filePath);
     }
 
     public void loadPuzzleFromFile(String filePath) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            gameSize = Integer.parseInt(reader.readLine().trim());
-            board = new Grid2[gameSize][gameSize];
 
             topClues = parseClueLine(reader.readLine());
             rightClues = parseClueLine(reader.readLine());
             bottomClues = parseClueLine(reader.readLine());
             leftClues = parseClueLine(reader.readLine());
 
-            initializeBoard(); // Initialize the board with default values
+            initializeBoard();
         }
     }
 
@@ -206,13 +45,6 @@ public class Puzzle2 {
             clues[i] = Integer.parseInt(parts[i]);
         }
         return clues;
-    }
-
-    public void setClues(int[] topClues, int[] bottomClues, int[] leftClues, int[] rightClues) {
-        this.topClues = topClues;
-        this.bottomClues = bottomClues;
-        this.leftClues = leftClues;
-        this.rightClues = rightClues;
     }
 
     private void initializeBoard() {

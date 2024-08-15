@@ -6,9 +6,12 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-
+        if (args.length < 1) {
+            System.out.println("Please provide a file path to the puzzle file as a command-line argument.");
+            return;
+        }
         
-        int gameSize = 4; // Define the size of the puzzle (4x4, 5x5, etc.)
+        String filePath = args[0];
         GeneticAlgorithm2 ga = new GeneticAlgorithm2(380, 0.09, 0.9, 4500);
 
         // Start the timer in a separate thread
@@ -37,7 +40,7 @@ public class Main {
 
         timer.scheduleAtFixedRate(task, 0, 100); // Update every 1 mili second
 
-        ga.initializePopulation(gameSize);
+        ga.initializePopulation(filePath);
 
         ga.run();
 

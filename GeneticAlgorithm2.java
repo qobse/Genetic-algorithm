@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,7 +11,6 @@ public class GeneticAlgorithm2 {
     private List<Puzzle2> population;
     private Random random;
     private int generation;
-    // private long elapsedTime;
     private List<Integer> bestFitnessPerGeneration;
     private List<Long> generationTimes;
     private int convergenceGeneration; //  to track the convergence generation
@@ -31,9 +31,15 @@ public class GeneticAlgorithm2 {
         this.hasConverged = false; // Initialize as false
     }
 
-    public void initializePopulation(int gameSize) {
+    public void initializePopulation(String filePath) {
         for (int i = 0; i < populationSize; i++) {
-            population.add(new Puzzle2(gameSize));
+            try {
+                population.add(new Puzzle2(filePath));
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Failed to load puzzle from file: " + filePath);
+                return;
+            }
         }
     }
 
