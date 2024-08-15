@@ -1,3 +1,8 @@
+levels/*
+solutions/*
+test_result/*
+final_results/*
+misc_libraries/*
 # General
 .DS_Store
 .AppleDouble

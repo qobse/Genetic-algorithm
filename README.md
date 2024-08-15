@@ -1,4 +1,3 @@
-4           #game size
 3 1 3 2     #Top clues (from left to right)
 2 1 3 2     #Right clues (from top to bottom)
 2 4 1 2     #Bottom clues (from left to right)
