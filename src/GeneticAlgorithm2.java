@@ -1,10 +1,7 @@
-package src;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import Puzzle2;
 
 public class GeneticAlgorithm2 {
     private int populationSize;

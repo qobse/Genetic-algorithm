@@ -1,4 +1,3 @@
-package src;
 public class Grid2 {
     private int value;
 

@@ -1,9 +1,6 @@
-
 // this is based on puzzle2 and gride2
 import java.util.Timer;
 import java.util.TimerTask;
-
-import src.GeneticAlgorithm2;
 
 import java.util.List;
 
