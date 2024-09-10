@@ -67,7 +67,7 @@ public class PuzzleGUI extends Application {
     private void populatePuzzleGrid(GridPane grid) {
         // Clear only the grid slots and clues, but keep the button intact
         grid.getChildren().clear();
-
+    
         // Populate the grid only if clues are not null
         if (topClues != null && rightClues != null && bottomClues != null && leftClues != null) {
             // Re-initialize the grid slots with the updated grid size
@@ -81,9 +81,9 @@ public class PuzzleGUI extends Application {
                     grid.getRowConstraints().add(rowConstraints);
                 }
             }
-
+    
             TextField[][] slots = new TextField[gridSize][gridSize];
-
+    
             // Initialize grid cells (slots)
             for (int row = 0; row < gridSize; row++) {
                 for (int col = 0; col < gridSize; col++) {
@@ -92,20 +92,27 @@ public class PuzzleGUI extends Application {
                     slot.setPrefHeight(40);
                     slots[row][col] = slot;
                     grid.add(slot, col + 1, row + 1);
+    
+                    // Add event filter to accept only numeric input
+                    slot.textProperty().addListener((observable, oldValue, newValue) -> {
+                        if (!newValue.matches("\\d*")) {
+                            slot.setText(newValue.replaceAll("[^\\d]", ""));
+                        }
+                    });
                 }
             }
-
+    
             // Add the clues to the grid
             for (int i = 0; i < gridSize; i++) {
                 Label topClue = new Label(String.valueOf(topClues[i]));
                 grid.add(topClue, i + 1, 0);
-
+    
                 Label rightClue = new Label(String.valueOf(rightClues[i]));
                 grid.add(rightClue, gridSize + 1, i + 1);
-
+    
                 Label bottomClue = new Label(String.valueOf(bottomClues[i]));
                 grid.add(bottomClue, i + 1, gridSize + 1);
-
+    
                 Label leftClue = new Label(String.valueOf(leftClues[i]));
                 grid.add(leftClue, 0, i + 1);
             }
