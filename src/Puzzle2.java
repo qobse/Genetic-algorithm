@@ -123,6 +123,22 @@ public class Puzzle2 {
         return gameSize;
     }
 
+    public int[] getTopClues() {
+        return topClues;
+    }
+
+    public int[] getRightClues() {
+        return rightClues;
+    }
+
+    public int[] getBottomClues() {
+        return bottomClues;
+    }
+
+    public int[] getLeftClues() {
+        return leftClues;
+    }
+
     public void printBoard() {
         StringBuilder sb = new StringBuilder();
 
