@@ -1,9 +1,7 @@
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.layout.ColumnConstraints;
@@ -12,19 +10,21 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 public class PuzzleGUI extends Application {
 
     private int gridSize = 4;
-
     private int[] topClues = null;
     private int[] rightClues = null;
     private int[] bottomClues = null;
     private int[] leftClues = null;
+
+    private GeneticAlgorithm2 ga;
+    private TextField[][] slots;
+    private TextArea outputArea;
+    private File loadedPuzzleFile = null;
 
     @Override
     public void start(Stage primaryStage) {
@@ -48,28 +48,108 @@ public class PuzzleGUI extends Application {
             if (file != null) {
                 loadCluesFromFile(file);
                 populatePuzzleGrid(grid); // Refresh the grid after loading clues
+                loadedPuzzleFile = file; // Keep track of the selected file
             }
         });
 
-        // Create a VBox to hold both the button and the puzzle grid
+        // GA controls
+        Label popSizeLabel = new Label("Population Size:");
+        TextField popSizeInput = new TextField("100");
+
+        Label mutationRateLabel = new Label("Mutation Rate:");
+        TextField mutationRateInput = new TextField("0.05");
+
+        Label crossoverRateLabel = new Label("Crossover Rate:");
+        TextField crossoverRateInput = new TextField("0.8");
+
+        Label maxGenLabel = new Label("Max Generations:");
+        TextField maxGenInput = new TextField("10000");
+
+        Button startGAButton = new Button("Start Genetic Algorithm");
+        startGAButton.setOnAction(event -> {
+            if (loadedPuzzleFile == null) {
+                showAlert("Please load a puzzle file before starting the GA.");
+                return;
+            }
+
+            try {
+                int populationSize = Integer.parseInt(popSizeInput.getText());
+                double mutationRate = Double.parseDouble(mutationRateInput.getText());
+                double crossoverRate = Double.parseDouble(crossoverRateInput.getText());
+                int maxGenerations = Integer.parseInt(maxGenInput.getText());
+
+                ga = new GeneticAlgorithm2(populationSize, mutationRate, crossoverRate, maxGenerations);
+                ga.initializePopulation(loadedPuzzleFile.getPath());
+
+                outputArea.appendText("Starting Genetic Algorithm...\n");
+                runGAAndDisplayResult(grid);
+
+            } catch (NumberFormatException e) {
+                outputArea.appendText("Error: Invalid GA parameters\n");
+            }
+        });
+
+        outputArea = new TextArea();
+        outputArea.setEditable(false);
+        outputArea.setPrefHeight(200);
+
+        // Create a VBox to hold GA controls and output
+        VBox gaControls = new VBox(10);
+        gaControls.setAlignment(Pos.CENTER);
+        gaControls.setPadding(new Insets(10, 10, 10, 10));
+        gaControls.getChildren().addAll(
+                popSizeLabel, popSizeInput,
+                mutationRateLabel, mutationRateInput,
+                crossoverRateLabel, crossoverRateInput,
+                maxGenLabel, maxGenInput,
+                startGAButton, outputArea
+        );
+
+        // Create a VBox to hold both the button, grid and GA controls
         VBox root = new VBox(10); // Spacing between elements
         root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(loadFileButton, grid);
+        root.getChildren().addAll(loadFileButton, grid, gaControls);
 
-        Scene scene = new Scene(root, 400, 400);
-        primaryStage.setTitle("Puzzle GUI");
+        Scene scene = new Scene(root, 800, 800);
+        primaryStage.setTitle("Puzzle GUI with GA");
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(400);
-        primaryStage.setMinWidth(400);
+        primaryStage.setMinHeight(600);
+        primaryStage.setMinWidth(600);
         primaryStage.show();
     }
 
+    private void runGAAndDisplayResult(GridPane grid) {
+        new Thread(() -> {
+            ga.run();
+            Puzzle2 bestSolution = ga.getBestSolution();
+            // Update the grid in the UI thread
+            javafx.application.Platform.runLater(() -> updateGridWithSolution(grid, bestSolution));
+            outputArea.appendText("GA completed!\n");
+            outputArea.appendText("Best fitness per generation:\n");
+            for (int fitness : ga.getBestFitnessPerGeneration()) {
+                outputArea.appendText(fitness + "\n");
+            }
+
+            outputArea.appendText("\nConverged at generation: " + ga.getConvergenceGeneration() + "\n");
+            outputArea.appendText("Total generations: " + ga.getGeneration() + "\n");
+        }).start();
+    }
+
+    private void updateGridWithSolution(GridPane grid, Puzzle2 solution) {
+        Grid2[][] board = solution.getBoard();
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
+                slots[i][j].setText(String.valueOf(board[i][j].getValue()));
+            }
+        }
+    }
+
     private void populatePuzzleGrid(GridPane grid) {
-        // Clear only the grid slots and clues, but keep the button intact
         grid.getChildren().clear();
-    
-        // Populate the grid only if clues are not null
+
         if (topClues != null && rightClues != null && bottomClues != null && leftClues != null) {
+            slots = new TextField[gridSize][gridSize];
+
             // Re-initialize the grid slots with the updated grid size
             for (int i = 0; i <= gridSize + 1; i++) {
                 ColumnConstraints colConstraints = new ColumnConstraints(25); // Width of columns
@@ -81,9 +161,7 @@ public class PuzzleGUI extends Application {
                     grid.getRowConstraints().add(rowConstraints);
                 }
             }
-    
-            TextField[][] slots = new TextField[gridSize][gridSize];
-    
+
             // Initialize grid cells (slots)
             for (int row = 0; row < gridSize; row++) {
                 for (int col = 0; col < gridSize; col++) {
@@ -92,7 +170,7 @@ public class PuzzleGUI extends Application {
                     slot.setPrefHeight(40);
                     slots[row][col] = slot;
                     grid.add(slot, col + 1, row + 1);
-    
+
                     // Add event filter to accept only numeric input
                     slot.textProperty().addListener((observable, oldValue, newValue) -> {
                         if (!newValue.matches("\\d*")) {
@@ -101,18 +179,18 @@ public class PuzzleGUI extends Application {
                     });
                 }
             }
-    
+
             // Add the clues to the grid
             for (int i = 0; i < gridSize; i++) {
                 Label topClue = new Label(String.valueOf(topClues[i]));
                 grid.add(topClue, i + 1, 0);
-    
+
                 Label rightClue = new Label(String.valueOf(rightClues[i]));
                 grid.add(rightClue, gridSize + 1, i + 1);
-    
+
                 Label bottomClue = new Label(String.valueOf(bottomClues[i]));
                 grid.add(bottomClue, i + 1, gridSize + 1);
-    
+
                 Label leftClue = new Label(String.valueOf(leftClues[i]));
                 grid.add(leftClue, 0, i + 1);
             }
@@ -120,25 +198,24 @@ public class PuzzleGUI extends Application {
     }
 
     private void loadCluesFromFile(File file) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            topClues = parsClueLine(reader.readLine());
-            rightClues = parsClueLine(reader.readLine());
-            bottomClues = parsClueLine(reader.readLine());
-            leftClues = parsClueLine(reader.readLine());
-
+        try {
+            Puzzle2 puzzle = new Puzzle2(file.getPath());
+            topClues = puzzle.getTopClues();
+            rightClues = puzzle.getRightClues();
+            bottomClues = puzzle.getBottomClues();
+            leftClues = puzzle.getLeftClues();
             gridSize = topClues.length; // Update grid size based on the loaded file
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private int[] parsClueLine(String line) {
-        String[] parts = line.split(" ");
-        int[] clues = new int[parts.length];
-        for (int i = 0; i < parts.length; i++) {
-            clues[i] = Integer.parseInt(parts[i]);
-        }
-        return clues;
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public static void main(String[] args) {
