@@ -54,16 +54,16 @@ public class PuzzleGUI extends Application {
 
         // GA controls
         Label popSizeLabel = new Label("Population Size:");
-        TextField popSizeInput = new TextField("100");
+        TextField popSizeInput = new TextField("300");
 
         Label mutationRateLabel = new Label("Mutation Rate:");
-        TextField mutationRateInput = new TextField("0.05");
+        TextField mutationRateInput = new TextField("0.09");
 
         Label crossoverRateLabel = new Label("Crossover Rate:");
-        TextField crossoverRateInput = new TextField("0.8");
+        TextField crossoverRateInput = new TextField("0.9");
 
         Label maxGenLabel = new Label("Max Generations:");
-        TextField maxGenInput = new TextField("10000");
+        TextField maxGenInput = new TextField("4500");
 
         Button startGAButton = new Button("Start Genetic Algorithm");
         startGAButton.setOnAction(event -> {
