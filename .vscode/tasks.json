@@ -1,0 +1,45 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "javac",
+            "args": [
+                "--module-path",
+                "lib/javafx-sdk-22.0.2/lib/",
+                "--add-modules",
+                "javafx.controls,javafx.fxml",
+                "-d",
+                "build",
+                "src/**/*.java"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$javac"],
+            "detail": "Compile Java source files"
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "--module-path",
+                "lib/javafx-sdk-22.0.2/lib/",
+                "--add-modules",
+                "javafx.controls,javafx.fxml",
+                "-cp",
+                "build",
+                "PuzzleGUI"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "Run Java application"
+        }
+    ]
+}

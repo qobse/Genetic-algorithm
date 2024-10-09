@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "PuzzleGUI",
+            "request": "launch",
+            "mainClass": "PuzzleGUI",
+            "projectName": "ga_for_skyscraper_162fc7d0"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)",
+            "request": "launch",
+            "mainClass": "PuzzleGUI",
+            "vmArgs": "--module-path lib/javafx-sdk-22.0.2/lib/ --add-modules javafx.controls,javafx.fxml",
+            "classPaths": [
+                "build"
+            ]
+        }
+    ]
+}
