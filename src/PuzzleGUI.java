@@ -13,6 +13,7 @@ import javafx.geometry.Insets;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 
 public class PuzzleGUI extends Application {
 
@@ -136,14 +137,14 @@ public class PuzzleGUI extends Application {
                 ga.run();
                 Puzzle2 bestSolution = ga.getBestSolution();
                 // Update the grid in the UI thread
-                Platform.runLater(() -> updateGridWithSolution(grid, bestSolution));
                 Platform.runLater(() -> {
+                    updateGridWithSolution(grid, bestSolution);
+                    highlightRuleViolations(grid, bestSolution);
                     outputArea.appendText("GA running...\n");
                     outputArea.appendText("Best fitness per generation:\n");
                     for (int fitness : ga.getBestFitnessPerGeneration()) {
                         outputArea.appendText(fitness + "\n");
                     }
-
                     outputArea.appendText("\nConverged at generation: " + ga.getConvergenceGeneration() + "\n");
                     outputArea.appendText("Total generations: " + ga.getGeneration() + "\n");
                 });
@@ -151,7 +152,12 @@ public class PuzzleGUI extends Application {
             if (stopGA) {
                 Platform.runLater(() -> outputArea.appendText("GA stopped by user.\n"));
             } else {
-                Platform.runLater(() -> outputArea.appendText("GA completed!\n"));
+                Platform.runLater(() -> {
+                    outputArea.appendText("GA completed!\n");
+                    if (ga.isConverged()) {
+                        highlightSolution(grid);
+                    }
+                });
             }
         }).start();
     }
@@ -163,6 +169,81 @@ public class PuzzleGUI extends Application {
                 slots[i][j].setText(String.valueOf(board[i][j].getValue()));
             }
         }
+    }
+
+    private void highlightRuleViolations(GridPane grid, Puzzle2 solution) {
+        Grid2[][] board = solution.getBoard();
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
+                if (isRuleViolated(board, i, j)) {
+                    slots[i][j].setStyle("-fx-background-color: red;");
+                } else {
+                    slots[i][j].setStyle(""); // Reset to default style
+                }
+            }
+        }
+    }
+
+    private void highlightSolution(GridPane grid) {
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
+                slots[i][j].setStyle("-fx-background-color: green;");
+            }
+        }
+    }
+
+    private boolean isRuleViolated(Grid2[][] board, int row, int col) {
+        return isRowViolated(board, row) || isColumnViolated(board, col) || isClueViolated(board, row, col);
+    }
+
+    private boolean isRowViolated(Grid2[][] board, int row) {
+        HashSet<Integer> seen = new HashSet<>();
+        for (int i = 0; i < gridSize; i++) {
+            int value = board[row][i].getValue();
+            if (value == Puzzle2.getEmptyValue() || seen.contains(value) || value < 1 || value > gridSize) {
+                return true;
+            }
+            seen.add(value);
+        }
+        return false;
+    }
+
+    private boolean isColumnViolated(Grid2[][] board, int col) {
+        HashSet<Integer> seen = new HashSet<>();
+        for (int i = 0; i < gridSize; i++) {
+            int value = board[i][col].getValue();
+            if (value == Puzzle2.getEmptyValue() || seen.contains(value) || value < 1 || value > gridSize) {
+                return true;
+            }
+            seen.add(value);
+        }
+        return false;
+    }
+
+    private boolean isClueViolated(Grid2[][] board, int row, int col) {
+        return isClueViolatedForLine(board, topClues, false, true, row, col) ||
+               isClueViolatedForLine(board, bottomClues, false, false, row, col) ||
+               isClueViolatedForLine(board, leftClues, true, true, row, col) ||
+               isClueViolatedForLine(board, rightClues, true, false, row, col);
+    }
+
+    private boolean isClueViolatedForLine(Grid2[][] board, int[] clues, boolean checkRow, boolean fromStart, int row, int col) {
+        for (int line = 0; line < gridSize; line++) {
+            int maxSeen = 0;
+            int seenCount = 0;
+            for (int pos = 0; pos < gridSize; pos++) {
+                int idx = fromStart ? pos : gridSize - 1 - pos;
+                int value = checkRow ? board[line][idx].getValue() : board[idx][line].getValue();
+                if (value > maxSeen) {
+                    maxSeen = value;
+                    seenCount++;
+                }
+            }
+            if (clues[line] != 0 && seenCount != clues[line]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void populatePuzzleGrid(GridPane grid) {

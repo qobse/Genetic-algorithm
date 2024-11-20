@@ -139,6 +139,10 @@ public class Puzzle2 {
         return leftClues;
     }
 
+    public static int getEmptyValue() {
+        return EMPTY;
+    }
+
     public void printBoard() {
         StringBuilder sb = new StringBuilder();
 
