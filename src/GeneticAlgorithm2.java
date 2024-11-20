@@ -15,6 +15,7 @@ public class GeneticAlgorithm2 {
     private List<Long> generationTimes;
     private int convergenceGeneration; //  to track the convergence generation
     private boolean hasConverged; // to indicate if the GA has converged
+    private volatile boolean stopGA = false;
 
     public GeneticAlgorithm2(int populationSize, double mutationRate, double crossoverRate, int maxGenerations) {
         System.out.println("populationSize: " + populationSize + " mutationRate: " + mutationRate + " crossoverRate: "
@@ -74,6 +75,10 @@ public class GeneticAlgorithm2 {
             bestFitnessPerGeneration.add(bestInGeneration.fitness());
             generationTimes.add(elapsedTime);
 
+            if (stopGA){
+                break;
+            }
+
             // Check for convergence
             if (!hasConverged && checkConvergence()) {
                 convergenceGeneration = generation;
@@ -129,6 +134,14 @@ public class GeneticAlgorithm2 {
 
     public int getGeneration() {
         return generation;
+    }
+
+    public boolean isConverged() {
+        return hasConverged;
+    }
+
+    public void setStopGA(boolean stopGA) {
+        this.stopGA = stopGA;
     }
 
     private Puzzle2 selectParent() {

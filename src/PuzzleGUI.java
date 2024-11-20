@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -25,6 +26,7 @@ public class PuzzleGUI extends Application {
     private TextField[][] slots;
     private TextArea outputArea;
     private File loadedPuzzleFile = null;
+    private volatile boolean stopGA = false;
 
     @Override
     public void start(Stage primaryStage) {
@@ -81,11 +83,21 @@ public class PuzzleGUI extends Application {
                 ga = new GeneticAlgorithm2(populationSize, mutationRate, crossoverRate, maxGenerations);
                 ga.initializePopulation(loadedPuzzleFile.getPath());
 
-                outputArea.appendText("Starting Genetic Algorithm...\n");
+                Platform.runLater(() -> outputArea.appendText("Starting Genetic Algorithm...\n"));
+                stopGA = false;
+                ga.setStopGA(false); // Reset the stop flag
                 runGAAndDisplayResult(grid);
 
             } catch (NumberFormatException e) {
-                outputArea.appendText("Error: Invalid GA parameters\n");
+                Platform.runLater(() -> outputArea.appendText("Error: Invalid GA parameters\n"));
+            }
+        });
+
+        Button stopGAButton = new Button("Stop Genetic Algorithm");
+        stopGAButton.setOnAction(event -> {
+            stopGA = true;
+            if (ga != null) {
+                ga.setStopGA(true); // Set the stop flag in the GA class
             }
         });
 
@@ -102,7 +114,7 @@ public class PuzzleGUI extends Application {
                 mutationRateLabel, mutationRateInput,
                 crossoverRateLabel, crossoverRateInput,
                 maxGenLabel, maxGenInput,
-                startGAButton, outputArea
+                startGAButton, stopGAButton, outputArea
         );
 
         // Create a VBox to hold both the button, grid and GA controls
@@ -120,18 +132,27 @@ public class PuzzleGUI extends Application {
 
     private void runGAAndDisplayResult(GridPane grid) {
         new Thread(() -> {
-            ga.run();
-            Puzzle2 bestSolution = ga.getBestSolution();
-            // Update the grid in the UI thread
-            javafx.application.Platform.runLater(() -> updateGridWithSolution(grid, bestSolution));
-            outputArea.appendText("GA completed!\n");
-            outputArea.appendText("Best fitness per generation:\n");
-            for (int fitness : ga.getBestFitnessPerGeneration()) {
-                outputArea.appendText(fitness + "\n");
-            }
+            while (!stopGA && !ga.isConverged()) {
+                ga.run();
+                Puzzle2 bestSolution = ga.getBestSolution();
+                // Update the grid in the UI thread
+                Platform.runLater(() -> updateGridWithSolution(grid, bestSolution));
+                Platform.runLater(() -> {
+                    outputArea.appendText("GA running...\n");
+                    outputArea.appendText("Best fitness per generation:\n");
+                    for (int fitness : ga.getBestFitnessPerGeneration()) {
+                        outputArea.appendText(fitness + "\n");
+                    }
 
-            outputArea.appendText("\nConverged at generation: " + ga.getConvergenceGeneration() + "\n");
-            outputArea.appendText("Total generations: " + ga.getGeneration() + "\n");
+                    outputArea.appendText("\nConverged at generation: " + ga.getConvergenceGeneration() + "\n");
+                    outputArea.appendText("Total generations: " + ga.getGeneration() + "\n");
+                });
+            }
+            if (stopGA) {
+                Platform.runLater(() -> outputArea.appendText("GA stopped by user.\n"));
+            } else {
+                Platform.runLater(() -> outputArea.appendText("GA completed!\n"));
+            }
         }).start();
     }
 
