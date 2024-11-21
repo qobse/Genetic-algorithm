@@ -50,8 +50,3 @@ Create a new text file with the puzzle clues in the following format: <br>
 - Educational Tool: This project can be used to teach and demonstrate the principles of Genetic Algorithms and their application to solving logic puzzles.
 - Puzzle Solving: Users can solve Skyscraper puzzles of varying difficulty levels, either interactively or via the command line.
 - Research: Researchers can use this project to experiment with different GA parameters and strategies to optimize puzzle-solving performance.
-
-3 1 3 2     #Top clues (from left to right)
-2 1 3 2     #Right clues (from top to bottom)
-2 4 1 2     #Bottom clues (from left to right)
-2 3 1 2     #Left clues (from top to bottom)
