@@ -1,3 +1,16 @@
+/**
+ * PuzzleGUI.java
+ * 
+ * This class provides a graphical user interface (GUI) for solving the Skyscraper puzzle using a Genetic Algorithm (GA).
+ * 
+ * Author: Yaqoob Yaghoubi
+ * Date: 
+ * 
+ * Description:
+ * This class contains methods for loading puzzle files, setting GA parameters, running the GA, and dynamically updating the GUI
+ * to show the progress of the GA. It also highlights rule violations in red and the solution in green.
+ */
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;

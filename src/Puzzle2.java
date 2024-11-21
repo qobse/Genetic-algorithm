@@ -1,3 +1,18 @@
+/**
+ * Puzzle2.java
+ * 
+ * This class represents the Skyscraper puzzle and includes methods for initializing the puzzle,
+ * loading puzzle clues from a file, calculating the fitness of a solution, and printing the puzzle board.
+ * 
+ * Author: Yaqoob Yaghoubi
+ * Date: 
+ * 
+ * Description:
+ * This class contains methods to initialize the puzzle board, load clues from a file, calculate the fitness
+ * of a solution based on the puzzle rules, and print the puzzle board. It also includes methods to get and set
+ * the values of the puzzle grid and clues.
+ */
+
 import java.util.Random;
 
 import java.io.BufferedReader;

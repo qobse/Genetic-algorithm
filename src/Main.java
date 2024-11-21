@@ -1,4 +1,18 @@
-// this is based on puzzle2 and gride2
+/**
+ * Main.java
+ * 
+ * This class serves as the entry point for running the Genetic Algorithm (GA) to solve the Skyscraper puzzle.
+ * It initializes the GA, starts a timer to track the elapsed time, and prints the progress and results of the GA.
+ * 
+ * Author: Yaqoob Yaghoubi
+ * Date: 
+ * 
+ * Description:
+ * This class reads the puzzle file path from the command-line arguments, initializes the GA with specified parameters,
+ * and runs the GA. It also tracks the elapsed time using a Timer and prints the fitness progress, generation times,
+ * and the best solution found by the GA.
+ */
+
 import java.util.Timer;
 import java.util.TimerTask;
 

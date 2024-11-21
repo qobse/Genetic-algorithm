@@ -1,3 +1,16 @@
+/**
+ * GeneticAlgorithm2.java
+ * 
+ * This class implements a Genetic Algorithm to solve the Skyscraper puzzle.
+ * 
+ * Author: Yaqoob Yaghoubi
+ * Date: 
+ * 
+ * Description:
+ * This class contains methods for initializing the population, running the genetic algorithm,
+ * performing selection, crossover, and mutation operations, and checking for convergence.
+ */
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
