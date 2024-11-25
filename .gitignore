@@ -92,6 +92,7 @@ replay_pid*
 
 # Graphics Interchange Format
 *.gif
+!skyscraper_ga_demo.gif
 
 # RAW
 *.raw

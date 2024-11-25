@@ -1,7 +1,10 @@
 # Skyscraper Puzzle Solver with Genetic Algorithm
 
 This project implements a Genetic Algorithm (GA) to solve the Skyscraper puzzle. It includes both a graphical user interface (GUI) and a terminal text view for solving and visualizing the puzzle.
-The goal of this project is to test the performance of Genetic Algorithm using skyscraper puzzle as NP-complete problem.
+The goal of this project is to test the performance of Genetic Algorithm using skyscraper puzzle as NP-complete problem. <br>
+
+![Alt Text](skyscraper_ga_demo.gif)
+
 
 ## Table of Contents
 
