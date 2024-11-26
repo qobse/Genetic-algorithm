@@ -101,7 +101,9 @@ replay_pid*
 *.webp
 
 # Portable Network Graphics
-*.png
+*.
+!gui.png
+!terminal.png
 
 # Animated Portable Network Graphics
 *.apng
@@ -119,6 +121,7 @@ replay_pid*
 
 # Portable Document Format
 *.pdf
+!docs/AI-Based_Puzzle_Game_Solver.pdf
 
 # X BitMap
 *.xbm

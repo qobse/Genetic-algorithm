@@ -33,11 +33,14 @@ The Skyscraper puzzle is a logic game where the objective is to place skyscraper
 I developed this project using Vscode, in order to run the project the project using termonal text interface it just need to have Java installed on the matchine along with Java development pack extention in vscode. To run the GUI, javafx library is required to have. Here I attached the vscode settings along with the necessary libraries. to compile the java codes it required to using buil option of vscode which using command palette.
 
 ### Using GUI
-In order to run project using GUI first build java codes with `command palette > Tasks: Run build task` then run gui with `command palette > Tasks: run task`.
+In order to run project using GUI first build java codes with `command palette > Tasks: Run build task` then run gui with `command palette > Tasks: run task`.<br>
+<img src="gui.png" alt="Alt Text" width="400">
 
 ### Usinng terminal text interface
 build the java codes: `javac Main.java`
-run the code: `java Main instances/4x4.txt`
+run the code: `java Main instances/4x4.txt` <br>
+
+<img src="terminal.png" alt="Alt Text" width="400">
 
 ## Adding Custom Puzzles
 Create a new text file with the puzzle clues in the following format: <br>
